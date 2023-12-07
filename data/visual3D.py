@@ -45,8 +45,8 @@ def plot_sensors_targets(sensors, targets):
     plt.show()
 
 # Thay đổi đường dẫn tới file sensor.input và target.input của bạn
-sensor_file_path = 'D:\Minh.data\Dev Java\DE_Sensor\data\sensor.input'
-target_file_path = 'D:\Minh.data\Dev Java\DE_Sensor\data\sentarget.input'
+sensor_file_path = '.\data\sensor.input'
+target_file_path = '.\data\sentarget.input'
 
 # Đọc dữ liệu từ file
 sensors = read_sensor_file(sensor_file_path)

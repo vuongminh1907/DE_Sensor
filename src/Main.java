@@ -9,10 +9,10 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Đọc dữ liệu từ file sensor.input
-            List<Sensor> sensors = readSensors("D:\\Minh.data\\Dev Java\\DE_Sensor\\data\\sensor.input");
+            List<Sensor> sensors = readSensors("..\\data\\sensor.input");
 
             // Đọc dữ liệu từ file target.input
-            List<Target> targets = readTargets("D:\\Minh.data\\Dev Java\\DE_Sensor\\data\\sentarget.input");
+            List<Target> targets = readTargets("..\\data\\sentarget.input");
 
             // Xác định sensor cảm biến được những target nào
             ArrayList<ArrayList<Integer>> listTargets = new ArrayList<>();
@@ -38,19 +38,17 @@ public class Main {
             // Thực hiện Differential Evolution
             double F = 0.2;
             int populationSize = 20;
+            int generation_size = 1000;
             int numTargets = targets.size();  // Số lượng target
             int numOfSensor = sensors.size();
             DifferentialEvolution de = new DifferentialEvolution(F, populationSize, listSensors, listTargets,numTargets);
             Population population = de.initPopulation();
            
-            // Test
-            // System.out.println(population.getIndividual(0).getFitness());
-            //Individual individual1 = new Individual(numOfSensor,listTargets);
 
             
-            writeStartGen("D:\\Minh.data\\Dev Java\\DE_Sensor\\result\\gen.out");
+            writeStartGen("..\\result\\gen.out");
 
-            for (int generation = 0; generation < 500; generation++) {
+            for (int generation = 0; generation < generation_size; generation++) {
                 // Tiến hành lặp DE cho từng thế hệ
                 for (int i = 0; i < populationSize; i++) {
                     Individual target = population.getIndividual(i);
@@ -63,12 +61,12 @@ public class Main {
                 Individual bestIndividual = de.getFittest(population);
 
                 // Ghi thông tin về fitness của cá thể tốt nhất trong thế hệ vào file
-                writeGeneration("D:\\Minh.data\\Dev Java\\DE_Sensor\\result\\gen.out", generation, bestIndividual.getFitness());
+                writeGeneration("..\\result\\gen.out", generation, bestIndividual.getFitness());
             }
 
             // Lưu kết quả vào file result.out
             int maxFitness = de.getFittest(population).getFitness();
-            writeResult("D:\\Minh.data\\Dev Java\\DE_Sensor\\result\\result.out", maxFitness);
+            writeResult("..\\result\\result.out", maxFitness);
 
         } catch (IOException e) {
             e.printStackTrace();
