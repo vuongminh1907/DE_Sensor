@@ -18,7 +18,7 @@ for line in lines:
         values.append(value)
 
 # Vẽ đồ thị liền mạch
-plt.plot(generations, values, marker='o', linestyle='-')
+plt.plot(generations, values, marker='.', linestyle='-')
 plt.title('Best Fit for Each Generation')
 plt.xlabel('Generation')
 plt.ylabel('Value')
