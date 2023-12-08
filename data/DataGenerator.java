@@ -5,8 +5,8 @@ import java.util.Random;
 public class DataGenerator {
 
     public static void main(String[] args) {
-        generateSensorData("sensor.input", 1000, 1, 100, 20, 35);
-        generateTargetData("sentarget.input", 100, 10, 90);
+        generateSensorData("sensor.input", 300, 1, 50, 20, 35);
+        generateTargetData("sentarget.input", 10, 10, 45);
     }
 
     private static void generateSensorData(String fileName, int numSensors, int minX, int maxX, int minRadius, int maxRadius) {

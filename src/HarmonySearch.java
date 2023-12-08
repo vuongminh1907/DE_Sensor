@@ -83,7 +83,6 @@ public class HarmonySearch{
                     
                     int coin = new Random().nextInt(2);
 
-                    
                     if (coin == 1) {
                         int randomPosition = new Random().nextInt(listSensors.size());
                         int temp = mutatedIndividual.getSensor(i);
@@ -95,6 +94,17 @@ public class HarmonySearch{
         }
 
         return mutatedIndividual;
+    }
+
+    public Individual mutated(Individual individual) {
+        // Đột biến bằng cách tráo đổi 2 gen
+        int pos1 = new Random().nextInt(individual.getLength());
+        int pos2 = new Random().nextInt(individual.getLength());
+    
+        List<Integer> mutatedGenes = new ArrayList<>(individual.getIndividual());
+        Collections.swap(mutatedGenes, pos1, pos2);
+    
+        return new Individual(mutatedGenes, listTargets, numTargets);
     }
     
 

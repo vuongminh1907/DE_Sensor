@@ -36,9 +36,10 @@ public class MainDE {
             
 
             // Thực hiện Differential Evolution
-            double F = 0.5;
-            int populationSize = 20;
-            int generation_size = 1000;
+            double F = 0.8;
+            double mutationRate = 0.2;
+            int populationSize = 50;
+            int generation_size = 10000;
             int numTargets = targets.size();  // Số lượng target
             int numOfSensor = sensors.size();
             DifferentialEvolution de = new DifferentialEvolution(F, populationSize, listSensors, listTargets,numTargets);
@@ -50,11 +51,20 @@ public class MainDE {
             writeStartGen("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genDE.out");
 
             for (int generation = 0; generation < generation_size; generation++) {
+                System.out.println(generation);
                 // Tiến hành lặp DE cho từng thế hệ
                 for (int i = 0; i < populationSize; i++) {
                     Individual target = population.getIndividual(i);
+                    Individual crossed = population.getIndividual(i);
+                    if (Math.random() < mutationRate) {
+                        crossed = de.mutated(target);
+                    }
+                    else{
+            
                     Individual mutated = de.mutate(population, target);
-                    Individual crossed = de.crossover(target, mutated);
+                     crossed = de.crossover(target, mutated);
+                    }
+
                     population = de.replaceBetter(population, target, crossed, i);
                 }
 

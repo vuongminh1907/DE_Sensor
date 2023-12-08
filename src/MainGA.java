@@ -38,8 +38,8 @@ public class MainGA {
             // Thực hiện Genetic Algorithm
             double crossoverRate = 0.8;
             double mutationRate = 0.2;
-            int populationSize = 20;
-            int generationSize = 1000;
+            int populationSize = 50;
+            int generationSize = 10000;
             int numTargets = targets.size();  // Số lượng target
             int numOfSensor = sensors.size();
             
@@ -49,7 +49,8 @@ public class MainGA {
             writeStartGen("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genGA.out");
 
             for (int generation = 0; generation < generationSize; generation++) {
-                for (int i = 0; i < populationSize; i++) {
+                System.out.println(generation);
+                
                     Individual parent1 = population.getRandomIndividual();
                     Individual parent2 = population.getRandomIndividual();
                     Individual offspring = ga.crossover(parent1, parent2);
@@ -59,7 +60,7 @@ public class MainGA {
                     }
 
                     population = ga.replaceWorst(population, offspring);
-                }
+                
 
                 Individual bestIndividual = ga.getFittest(population);
                 writeGeneration("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genGA.out", generation, bestIndividual.getFitness());

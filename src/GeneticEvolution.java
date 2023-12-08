@@ -40,20 +40,24 @@ public class GeneticEvolution {
         return individuals[fittestIndex];
     }
 
-    public Individual crossover(Individual parent1, Individual parent2) {
-        // crossover điểm 
-        int crossoverPoint = new Random().nextInt(parent1.getLength());
+    public Individual crossover(Individual target, Individual mutated) {
+        int k = new Random().nextInt(target.getLength());
 
         List<Integer> newGenes = new ArrayList<>();
-        for (int i = 0; i < crossoverPoint; i++) {
-            newGenes.add(parent1.getSensor(i));
+        for (int i = 0; i < k; i++) {
+            newGenes.add(target.getSensor(i));
         }
 
-        for (int i = crossoverPoint; i < parent2.getLength(); i++) {
-            newGenes.add(parent2.getSensor(i));
+        for (int i = 0; i < mutated.getLength(); i++) {
+            int sensor = mutated.getSensor(i);
+            if (!newGenes.contains(sensor)) {
+                newGenes.add(sensor);
+            }
         }
 
-        return new Individual(newGenes, listTargets, numTargets);
+        Individual newIndividual = new Individual(newGenes, listTargets, numTargets);
+
+        return newIndividual;
     }
 
     public Individual mutate(Individual individual) {

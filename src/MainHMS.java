@@ -35,10 +35,10 @@ public class MainHMS {
             }
 
             // Thực hiện Harmony Search Algorithm
-            int populationSize = 20;
-            double hmcr = 0.8; // Điều chỉnh giá trị hmcr theo nhu cầu
+            int populationSize = 50;
+            double hmcr = 0.9; // Điều chỉnh giá trị hmcr theo nhu cầu
             double par = 0.2; // Điều chỉnh giá trị par theo nhu cầu
-            int generationSize = 1000;
+            int generationSize = 10000;
             int numTargets = targets.size();  // Số lượng target
 
             HarmonySearch hms = new HarmonySearch(populationSize, hmcr, par, listSensors, listTargets, numTargets);
@@ -47,15 +47,24 @@ public class MainHMS {
             writeStartGen("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genHMS.out");
 
             for (int generation = 0; generation < generationSize; generation++) {
-                    System.out.println(generation);
+                System.out.println(generation);
+
+                if (Math.random() >hmcr) {
+                    Individual newHarmony = population.getRandomIndividual();
+                    newHarmony = hms.mutated(newHarmony);
+                    population = hms.replaceWorst(population, newHarmony);
+                }
+                else{
+
                     Individual newHarmony = hms.Crossover(population);
                     newHarmony = hms.mutate(newHarmony);
                     //System.out.println("pass");
                     population = hms.replaceWorst(population, newHarmony);
-
+                }
 
                 Individual bestIndividual = hms.getFittest(population);
                 writeGeneration("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genHMS.out", generation, bestIndividual.getFitness());
+                
             }
 
             // Lưu kết quả vào file resultHMS.out

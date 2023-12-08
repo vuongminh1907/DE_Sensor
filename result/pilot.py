@@ -40,6 +40,6 @@ plt.grid(True)
 plt.legend()
 
 # Lưu đồ thị thành file ảnh (ví dụ: PNG)
-plt.savefig('result//Graph.png')
+plt.savefig('result//Graph1.png')
 
 

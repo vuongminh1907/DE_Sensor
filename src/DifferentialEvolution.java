@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -56,6 +57,16 @@ public class DifferentialEvolution {
 
         return mutateIndividual;
     }
+     public Individual mutated(Individual individual) {
+        // Đột biến bằng cách tráo đổi 2 gen
+        int pos1 = new Random().nextInt(individual.getLength());
+        int pos2 = new Random().nextInt(individual.getLength());
+    
+        List<Integer> mutatedGenes = new ArrayList<>(individual.getIndividual());
+        Collections.swap(mutatedGenes, pos1, pos2);
+    
+        return new Individual(mutatedGenes, listTargets, numTargets);
+    }
 
     public Individual crossover(Individual target, Individual mutated) {
         int k = new Random().nextInt(target.getLength());
@@ -76,6 +87,7 @@ public class DifferentialEvolution {
 
         return newIndividual;
     }
+    
 
     public Population replaceBetter(Population population, Individual target, Individual crossed, int index) {
         int targetFitness = target.getFitness();
