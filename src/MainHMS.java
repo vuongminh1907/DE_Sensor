@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class MainHMS {
     public static void main(String[] args) {
         try {
             // Đọc dữ liệu từ file sensor.input
-            List<Sensor> sensors = readSensors("..\\data\\sensor.input");
+            List<Sensor> sensors = readSensors("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\data\\sensor.input");
 
             // Đọc dữ liệu từ file target.input
-            List<Target> targets = readTargets("..\\data\\sentarget.input");
+            List<Target> targets = readTargets("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\data\\sentarget.input");
 
             // Xác định sensor cảm biến được những target nào
             ArrayList<ArrayList<Integer>> listTargets = new ArrayList<>();
@@ -33,46 +33,41 @@ public class Main {
             for (int i = 0; i < sensors.size(); i++) {
                 listSensors.add(i);
             }
-            
 
-            // Thực hiện Differential Evolution
-            double F = 0.2;
+            // Thực hiện Harmony Search Algorithm
             int populationSize = 20;
-            int generation_size = 1000;
+            double hmcr = 0.8; // Điều chỉnh giá trị hmcr theo nhu cầu
+            double par = 0.2; // Điều chỉnh giá trị par theo nhu cầu
+            int generationSize = 1000;
             int numTargets = targets.size();  // Số lượng target
-            int numOfSensor = sensors.size();
-            DifferentialEvolution de = new DifferentialEvolution(F, populationSize, listSensors, listTargets,numTargets);
-            Population population = de.initPopulation();
-           
 
-            
-            writeStartGen("..\\result\\gen.out");
+            HarmonySearch hms = new HarmonySearch(populationSize, hmcr, par, listSensors, listTargets, numTargets);
+            Population population = hms.initPopulation();
 
-            for (int generation = 0; generation < generation_size; generation++) {
-                // Tiến hành lặp DE cho từng thế hệ
-                for (int i = 0; i < populationSize; i++) {
-                    Individual target = population.getIndividual(i);
-                    Individual mutated = de.mutate(population, target);
-                    Individual crossed = de.crossover(target, mutated);
-                    population = de.replaceBetter(population, target, crossed, i);
-                }
+            writeStartGen("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genHMS.out");
 
-                // Lấy cá thể có độ thích nghi tốt nhất trong thế hệ hiện tại
-                Individual bestIndividual = de.getFittest(population);
+            for (int generation = 0; generation < generationSize; generation++) {
+                    System.out.println(generation);
+                    Individual newHarmony = hms.Crossover(population);
+                    newHarmony = hms.mutate(newHarmony);
+                    //System.out.println("pass");
+                    population = hms.replaceWorst(population, newHarmony);
 
-                // Ghi thông tin về fitness của cá thể tốt nhất trong thế hệ vào file
-                writeGeneration("..\\result\\gen.out", generation, bestIndividual.getFitness());
+
+                Individual bestIndividual = hms.getFittest(population);
+                writeGeneration("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\genHMS.out", generation, bestIndividual.getFitness());
             }
 
-            // Lưu kết quả vào file result.out
-            int maxFitness = de.getFittest(population).getFitness();
-            writeResult("..\\result\\result.out", maxFitness);
+            // Lưu kết quả vào file resultHMS.out
+            Individual maxFitness = hms.getFittest(population);
+            writeResult("C:\\Users\\Admin\\Documents\\GitHub\\DE_Sensor\\result\\resultHMS.out", maxFitness);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
+
+    }
     private static void displayListTargets(ArrayList<ArrayList<Integer>> listTargets) {
         for (int i = 0; i < listTargets.size(); i++) {
             System.out.print("Sensor " + i + " covers targets: ");
@@ -125,9 +120,11 @@ public class Main {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)+ (z1-z2) * (z1 - z2));
     }
 
-    private static void writeResult(String fileName, int maxFitness) throws IOException {
+    private static void writeResult(String fileName, Individual maxFitness) throws IOException {
         FileWriter writer = new FileWriter(fileName);
-        writer.write(Integer.toString(maxFitness));
+        List<Integer> displayResult = maxFitness.display();
+        
+        writer.write(String.join(" ", displayResult.stream().map(Object::toString).toArray(String[]::new)));
         writer.close();
     }
     private static void writeGeneration(String fileName, int index, int maxFitness) throws IOException {
@@ -140,6 +137,6 @@ public class Main {
         writer.write("Maximum fit for each generation: " + "\n");
         writer.close();
     }
+   
 
 }
-
